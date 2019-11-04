@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Health Check</title>
+  <meta name="description" content="Health Check" />
+  <meta name="author" content="GhLima" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+  <style>
+    #maindiv {
+      overflow-y: scroll;
+      max-height: 650px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: #F4F4F4;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      background: #F4F4F4;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #dad7d7;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <ul id="maindiv" class="list-group mt-4" data-js="lista"></ul>
+  </div>
+
+  <script type="text/javascript">
+    const socket = io('http://localhost:3500');
+    const list = document.querySelector('[data-js="lista"]');
+    socket.on('HealthCheck', data => {
+
+      const newItem = document.createElement('li');
+      newItem.textContent = `URL :  ${data.url}`;
+
+      if (data.status === 200) {
+        newItem.className = 'list-group-item m-2 shadow list-group-item-success';
+      }
+
+      if (data.status !== 200) {
+        newItem.className = 'list-group-item m-2 shadow list-group-item-danger';
+      }
+
+
+      const liStyles = document.createElement('span');
+      liStyles.textContent = data.status;
+      liStyles.className = 'float-right';
+
+      list.appendChild(newItem);
+      newItem.appendChild(liStyles);
+    });
+  </script>
+</body>
+
+</html>
