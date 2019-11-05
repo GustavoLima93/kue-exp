@@ -42,6 +42,10 @@
 
       const newItem = document.createElement('li');
       newItem.textContent = `URL :  ${data.url}`;
+      const newSpanDateInit = document.createElement('span')
+      const newSpanDateLast = document.createElement('span')
+      newSpanDateInit.textContent = `Data Criação  :  ${data.dateInit}`;
+      newSpanDateLast.textContent = `Data Processamento  :  ${data.dateLast}`;
 
       if (data.status === 200) {
         newItem.className = 'list-group-item m-2 shadow list-group-item-success';
@@ -56,8 +60,13 @@
       liStyles.textContent = data.status;
       liStyles.className = 'float-right';
 
+
       list.appendChild(newItem);
       newItem.appendChild(liStyles);
+      newItem.appendChild(document.createElement('br'));
+      newItem.appendChild(newSpanDateInit);
+      newItem.appendChild(document.createElement('br'));
+      newItem.appendChild(newSpanDateLast);
     });
   </script>
 </body>

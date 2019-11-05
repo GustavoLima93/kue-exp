@@ -1,4 +1,6 @@
 import kue from "kue";
+import { format, parseISO } from "date-fns";
+import pt from "date-fns/locale/pt";
 import io from "socket.io-client";
 import axios from "axios";
 
@@ -13,13 +15,32 @@ queue
     try {
       /** Values job */
       const { data } = job;
-      const { url } = data;
+      const { url, dateInit } = data;
+
+      const dateLast = format(
+        new Date(),
+        "'dia' dd 'de' MMMM', às ' H:mm:ss'h'",
+        {
+          locale: pt
+        }
+      );
 
       /** request axios */
       const request = await axios.get(`${job.data.url}`);
 
       /** socket emit */
-      socket.emit("HealthCheck", { url, status: request.status });
+      socket.emit("HealthCheck", {
+        url,
+        status: request.status,
+        dateLast,
+        dateInit: format(
+          parseISO(dateInit),
+          "'dia' dd 'de' MMMM', às ' H:mm:ss'h'",
+          {
+            locale: pt
+          }
+        )
+      });
 
       done();
       return request.data;
